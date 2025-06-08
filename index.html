@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindSync | Two Nareshes, One Connection</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6',
+                        secondary: '#a78bfa',
+                        dark: '#0f172a',
+                        light: '#f8fafc',
+                        accent: '#f59e0b'
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'blob': 'blob 8s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        blob: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS for elements that need precise control */
+        .brain-wave {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(139,92,246,0.6) 0%, rgba(139,92,246,0) 70%);
+            opacity: 0;
+            animation: wave 8s infinite;
+        }
+        
+        .brain-wave:nth-child(1) {
+            animation-delay: 0s;
+            left: 60%;
+            top: 20%;
+        }
+        
+        .brain-wave:nth-child(2) {
+            animation-delay: 2s;
+            left: 30%;
+            top: 50%;
+        }
+        
+        .brain-wave:nth-child(3) {
+            animation-delay: 4s;
+            left: 45%;
+            top: 70%;
+        }
+        
+        @keyframes wave {
+            0% { transform: scale(0.3); opacity: 0.8; }
+            70% { transform: scale(1); opacity: 0; }
+            100% { opacity: 0; }
+        }
+        
+        .mind-pattern {
+            background-image: radial-gradient(#a78bfa 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        .mirror-effect {
+            position: relative;
+        }
+        
+        .mirror-effect::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -20px;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.3), rgba(255,255,255,0));
+            transform: scaleY(-1);
+            opacity: 0.6;
+            border-radius: inherit;
+            z-index: -1;
+        }
+        
+        .grid-masonry {
+            display: grid;
+            grid-gap: 1rem;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-auto-rows: 200px;
+        }
+        
+        .grid-masonry > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .grid-masonry > div > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0.5rem;
+        }
+        
+        /* Lightbox styles */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+        }
+        
+        .lightbox-image {
+            max-height: 80vh;
+            border-radius: 0.5rem;
+        }
+        
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+        }
+        
+        .twin-test-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        
+        .twin-test-container.open {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-light dark:bg-dark text-dark dark:text-light font-sans transition-colors duration-300">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 font-bold text-primary text-2xl">
+                        <i class="fas fa-brain mr-2"></i>
+                        <span class="hidden sm:inline">MindSync</span>
+                        <span class="sm:hidden">MS</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-center space-x-4">
+                        <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Home</a>
+                        <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">About</a>
+                        <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Projects</a>
+                        <a href="#gallery" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Gallery</a>
+                        <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Contact</a>
+                        <button id="theme-toggle" class="p-2 rounded-full hover:bg-primary/20 transition-colors duration-200">
+                            <i class="fas fa-moon dark:hidden"></i>
+                            <i class="fas fa-sun hidden dark:block"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="p-2 rounded-full hover:bg-primary/20 transition-colors duration-200">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden pb-4 px-4">
+            <div class="flex flex-col space-y-2">
+                <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Home</a>
+                <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">About</a>
+                <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Projects</a>
+                <a href="#gallery" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Gallery</a>
+                <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Contact</a>
+                <button id="theme-toggle-mobile" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200 w-fit">
+                    Toggle Theme
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
+        <div class="absolute w-full h-full mind-pattern opacity-10 dark:opacity-5"></div>
+        
+        <!-- Animated brain waves -->
+        <div class="brain-wave"></div>
+        <div class="brain-wave"></div>
+        <div class="brain-wave"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+            <div class="text-center flex flex-col items-center">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                    Two Minds. <span class="block md:inline">One Sync.</span>
+                </h1>
+                <p class="text-xl md:text-2xl max-w-2xl mb-10">
+                    Two Naresh Choudharys sharing the same name, same mindset, and an unbreakable bond.
+                </p>
+                
+                <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 mb-16">
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300"></div>
+                        <div class="relative overflow-hidden rounded-xl p-2 bg-white dark:bg-slate-800">
+                            <img src="naresh ji siyol.jpg"
+                                 alt="Naresh 1" 
+                                 class="w-40 h-40 rounded-lg object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="text-center mt-2">Naresh Choudhary</div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-4xl text-primary animate-pulse-slow">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-accent to-primary rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300"></div>
+                        <div class="relative overflow-hidden rounded-xl p-2 bg-white dark:bg-slate-800">
+                            <img src="my profile photo1.jpg" 
+                                 alt="Naresh 2" 
+                                 class="w-40 h-40 rounded-lg object-cover transition-transform duration-500 hover:scale-110">
+                            <div class="text-center mt-2">Naresh Choudhary</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#about" class="px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                    Explore Our World <i class="fas fa-arrow-down ml-2"></i>
+                </a>
+                
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white dark:bg-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Our Story</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-lg">
+                    Two individuals with the same name, same passion, and an extraordinary connection.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 mb-20">
+                <div class="relative mirror-effect">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl opacity-75 blur"></div>
+                    <img src="https://images.unsplash.com/photo-1529333164855-9f9e988fca32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=700&q=80" 
+                         alt="Nareshes Meeting" 
+                         class="relative rounded-xl w-full h-auto">
+                </div>
+                
+                <div class="flex flex-col justify-center">
+                    <h3 class="text-2xl font-bold mb-4">How We Met</h3>
+                    <p class="mb-4">
+                        Abhi tk nhi mile hai 
+                    </p>
+                    
+                   
+                    <p class="mb-4">
+                        <!--People often confused us, not just by name but by our synchronized way of thinking. We would finish each other's sentences, arrive at the same ideas independently, and share dreams that were mirror images.
+                     --></p>
+                    <p>
+                       <!--  As we navigated life's adventures together, our bond strengthened into something truly special - a testament to the power of connection and synchronicity.
+                    --> </p>
+                     
+                </div>
+            </div>
+            
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Milestones</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-accent to-primary mx-auto mb-6"></div>
+            </div>
+            
+            <!-- Timeline -->
+            <div class="relative">
+                <div class="absolute left-1/2 w-1 h-full bg-gradient-to-b from-primary to-accent transform -translate-x-1/2 hidden md:block"></div>
+                
+                <div class="timeline-container space-y-8">
+                    <!-- Timeline items will be added here by JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Same Name, Same Flame Section -->
+            <div class="mt-32 text-center">
+                <h2 class="text-4xl font-bold mb-4">Same Name, Same Flame</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-lg mb-12">
+                    We share more than just a name. Here's what makes our connection special:
+                </p>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-primary dark:text-secondary text-4xl mb-4">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Mindset</h3>
+                        <p>Identical problem-solving approaches, similar perspectives on life, and matching thought patterns.</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-primary dark:text-secondary text-4xl mb-4">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Passions</h3>
+                        <p>Shared love for technology, music taste, hobbies, and creative pursuits.</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-primary dark:text-secondary text-4xl mb-4">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Goals</h3>
+                        <p>Aligned career aspirations, similar life priorities, and complementary dreams.</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                        <div class="text-primary dark:text-secondary text-4xl mb-4">
+                            <i class="fas fa-random"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Decisions</h3>
+                        <p>Independent choices that often match, leading to serendipitous coincidences.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 bg-slate-50 dark:bg-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Our Projects</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-accent to-primary mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-lg">
+                    Collaborative work where our sync creates something greater than the sum of its parts.
+                </p>
+            </div>
+            
+            <div class="flex justify-center mb-12">
+                <div class="inline-flex rounded-md shadow-sm" role="group">
+                    <button type="button" data-filter="all" class="project-filter px-6 py-2 text-sm font-medium rounded-l-lg bg-primary text-white">
+                        All
+                    </button>
+                    <button type="button" data-filter="tech" class="project-filter px-6 py-2 text-sm font-medium hover:bg-primary/20">
+                        Tech
+                    </button>
+                    <button type="button" data-filter="fun" class="project-filter px-6 py-2 text-sm font-medium hover:bg-primary/20">
+                        Fun
+                    </button>
+                    <button type="button" data-filter="social" class="project-filter px-6 py-2 text-sm font-medium rounded-r-lg hover:bg-primary/20">
+                        Social Impact
+                    </button>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 project-container">
+                <!-- Project items will be added here by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-white dark:bg-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Our Gallery</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-lg">
+                    Moments that capture our friendship journey
+                </p>
+            </div>
+            
+            <div class="grid-masonry">
+                <div class="gallery-item" style="grid-row: span 2;">
+                    <img src="https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Friends hanging out">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1529310399831-ed472b81d589?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Working together">
+                </div>
+                <div class="gallery-item" style="grid-row: span 2;">
+                    <img src="https://images.unsplash.com/photo-1498673394965-85cb14905c89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Celebrating">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1529333164855-9f9e988fca32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Adventure">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Funny moment">
+                </div>
+                <div class="gallery-item" style="grid-row: span 2;">
+                    <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Serious discussion">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Collaboration">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Working late">
+                </div>
+                <div class="gallery-item" style="grid-row: span 2;">
+                    <img src="https://images.unsplash.com/photo-1522228115018-d838bcce9c3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Portrait">
+                </div>
+            </div>
+        </div>
+        
+        <!-- Lightbox -->
+        <div id="lightbox" class="lightbox">
+            <span class="close-lightbox">&times;</span>
+            <div class="lightbox-content">
+                <img id="lightbox-image" class="lightbox-image" src="" alt="">
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white dark:bg-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">Sync With Us</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-accent to-primary mx-auto mb-6"></div>
+                <p class="max-w-2xl mx-auto text-lg">
+                    Connect with us individually or together - we're always excited to meet like-minded people!
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="contact-form">
+                    <h3 class="text-2xl font-bold mb-6">Send Us a Message</h3>
+                    <form>
+                        <div class="mb-6">
+                            <label for="name" class="block mb-2 text-sm font-medium">Your Name</label>
+                            <input type="text" id="name" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80">
+                        </div>
+                        <div class="mb-6">
+                            <label for="email" class="block mb-2 text-sm font-medium">Your Email</label>
+                            <input type="email" id="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80">
+                        </div>
+                        <div class="mb-6">
+                            <label for="naresh" class="block mb-2 text-sm font-medium">Which Naresh?</label>
+                            <select id="naresh" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80">
+                                <option value="both">Both</option>
+                                <option value="naresh1">Naresh 1</option>
+                                <option value="naresh2">Naresh 2</option>
+                            </select>
+                        </div>
+                        <div class="mb-6">
+                            <label for="message" class="block mb-2 text-sm font-medium">Your Message</label>
+                            <textarea id="message" rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80"></textarea>
+                        </div>
+                        <button type="submit" class="px-8 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-full font-bold hover:shadow-lg transition-all duration-300">
+                            Send Message <i class="fas fa-paper-plane ml-2"></i>
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="contact-info">
+                    <h3 class="text-2xl font-bold mb-6">Our Connections</h3>
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md">
+                        <div class="mb-8">
+                            <h4 class="text-lg font-semibold mb-4">Naresh Choudhary (1)</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                        <i class="fas fa-envelope text-primary"></i>
+                                    </div>
+                                    <span>naresh1@mindsync.example</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                        <i class="fab fa-twitter text-primary"></i>
+                                    </div>
+                                    <span>@naresh_one</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                        <i class="fab fa-linkedin text-primary"></i>
+                                    </div>
+                                    <span>linkedin.com/in/naresh1</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                        <i class="fab fa-github text-primary"></i>
+                                    </div>
+                                    <span>github.com/naresh1</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
+                            <h4 class="text-lg font-semibold mb-4">Naresh Choudhary (2)</h4>
+                            <div class="space-y-4">
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                        <i class="fas fa-envelope text-accent"></i>
+                                    </div>
+                                    <span>naresh2@mindsync.example</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                        <i class="fab fa-twitter text-accent"></i>
+                                    </div>
+                                    <span>@naresh_two</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                        <i class="fab fa-linkedin text-accent"></i>
+                                    </div>
+                                    <span>linkedin.com/in/naresh2</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                        <i class="fab fa-github text-accent"></i>
+                                    </div>
+                                    <span>github.com/naresh2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-8 p-6 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 dark:border-accent/20">
+                        <h4 class="text-lg font-semibold mb-3">Want to Sync With Us?</h4>
+                        <p>If you feel we share a similar mindset or you're just curious about our unique connection, don't hesitate to reach out. We're always open to new friendships and collaborations!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-6"><i class="fas fa-brain mr-2"></i> MindSync</h3>
+                    <p class="mb-4">
+                        Two minds, one extraordinary connection.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="hover:text-primary transition-colors">Home</a></li>
+                        <li><a href="#about" class="hover:text-primary transition-colors">Our Story</a></li>
+                        <li><a href="#projects" class="hover:text-primary transition-colors">Projects</a></li>
+                        <li><a href="#gallery" class="hover:text-primary transition-colors">Gallery</a></li>
+                        <li><a href="#blog" class="hover:text-primary transition-colors">Thoughts</a></li>
+                        <li><a href="#contact" class="hover:text-primary transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">Newsletter</h3>
+                    <p class="mb-4">
+                        Subscribe to get updates on our joint adventures and synchronizations.
+                    </p>
+                    <form class="flex">
+                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg text-dark w-full focus:outline-none">
+                        <button type="submit" class="px-4 py-2 rounded-r-lg bg-primary hover:bg-accent transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-800 mt-12 pt-8 text-center text-sm">
+                <p>© 2025 MindSync. All rights reserved. Created with <i class="fas fa-heart text-red-500"></i> by two Nareshes.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-accent">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+        
+        const toggleTheme = () => {
+            if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        };
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        themeToggleMobile.addEventListener('click', toggleTheme);
+        
+        // Check for saved theme preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+        
+        // Back to top button
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.remove('opacity-0', 'invisible');
+                backToTopButton.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopButton.classList.remove('opacity-100', 'visible');
+                backToTopButton.classList.add('opacity-0', 'invisible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+        
+        // Lightbox functionality
+        const galleryItems = document.querySelectorAll('.gallery-item img');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-image');
+        const closeLightbox = document.querySelector('.close-lightbox');
+        
+        galleryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                lightbox.style.display = 'flex';
+                lightboxImg.src = item.src;
+                lightboxImg.alt = item.alt;
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        closeLightbox.addEventListener('click', () => {
+            lightbox.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+        
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+        
+        // Timeline data
+        const timelineData = [
+            { 
+                year: "2025", 
+                title: "First Meeting", 
+                description: "Abhi tk nhi mile hai ", 
+                position: "left",
+                icon: "fa-handshake"
+            },
+            { 
+                year: "may 2025", 
+                title: "Shared Interests Discovered", 
+                description: "Realized we had similar taste in music, technology preferences, and problem-solving approaches.", 
+                position: "right",
+                icon: "fa-lightbulb"
+            },
+            { 
+                year: "june 2025", 
+                title: "First Project Together", 
+                description: "Collaborated on a college tech project where we discovered our synergy in brainstorming and execution.", 
+                position: "left",
+                icon: "fa-laptop-code"
+            },
+            { 
+                year: "4 june 2025", 
+                title: "MindSync Concept Born", 
+                description: "After several coincidences where we showed up with the same ideas independently, we realized our special connection and named it MindSync.", 
+                position: "right",
+                icon: "fa-brain"
+            },
+            { 
+                year: "2026", 
+                title: "First Business Venture", 
+                description: "Started our first joint business venture, combining our complementary skills and shared vision.", 
+                position: "left",
+                icon: "fa-briefcase"
+            },
+            { 
+                year: "june 2025", 
+                title: "MindSync Website", 
+                description: "Created this website to share our unique friendship and connect with like-minded individuals.", 
+                position: "right",
+                icon: "fa-globe"
+            }
+        ];
+        
+        // Populate timeline
+        const timelineContainer = document.querySelector('.timeline-container');
+        
+        timelineData.forEach(item => {
+            const timelineItem = document.createElement('div');
+            timelineItem.className = `relative timeline-item ${item.position === 'left' ? 'md:mr-auto md:pr-16' : 'md:ml-auto md:pl-16'} md:w-5/12`;
+            
+            timelineItem.innerHTML = `
+                <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow-md relative group ${item.position === 'left' ? 'text-right md:text-left' : 'text-right'}">
+                    <div class="absolute -inset-0.5 bg-gradient-to-r ${item.position === 'left' ? 'from-primary to-accent' : 'from-accent to-primary'} rounded-xl opacity-75 blur group-hover:opacity-100 transition-opacity"></div>
+                    <div class="relative bg-white dark:bg-slate-700 rounded-lg p-6 h-full">
+                        <div class="flex ${item.position === 'left' ? 'md:justify-start' : 'md:justify-end' } justify-center mb-2">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                                <i class="fas ${item.icon} text-primary"></i>
+                            </div>
+                        </div>
+                        <h4 class="text-xl font-bold mb-2">${item.title}</h4>
+                        <div class="text-sm text-primary dark:text-secondary font-medium mb-2">${item.year}</div>
+                        <p class="text-sm dark:text-gray-300">${item.description}</p>
+                    </div>
+                </div>
+            `;
+            
+            timelineContainer.appendChild(timelineItem);
+        });
+        
+        // Project data
+        const projectData = [
+            {
+                title: "SyncChat App",
+                description: "A messaging app that learns from both partners' communication styles to predict responses.",
+                category: "tech",
+                image: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                title: "Twin Jokes Channel",
+                description: "YouTube channel where we play on our identical names and similar thinking to create comedy sketches.",
+                category: "fun",
+                image: "https://images.unsplash.com/photo-1611162616475-463a66e8e8e3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                title: "Byte Buddies",
+                description: "Tech mentorship program pairing experienced developers with newcomers for weekly coding sessions.",
+                category: "social",
+                image: "https://images.unsplash.com/photo-1559028012-481c04fa702d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                title: "MindMatch Algorithm",
+                description: "Experimental compatibility matching based on cognitive patterns rather than interests or demographics.",
+                category: "tech",
+                image: "https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                title: "Sync Puzzles",
+                description: "Collaborative puzzle game where two players must think alike to solve challenges.",
+                category: "fun",
+                image: "https://images.unsplash.com/photo-1544306094-e10fb31a46c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            },
+            {
+                title: "Tech for Good Hackathon",
+                description: "Annual event bringing together developers to create solutions for social and environmental challenges.",
+                category: "social",
+                image: "https://images.unsplash.com/photo-1521791055366-0d553872125f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
+            }
+        ];
+        
+        // Populate projects
+        const projectContainer = document.querySelector('.project-container');
+        const projectFilters = document.querySelectorAll('.project-filter');
+        
+        const renderProjects = (filter = 'all') => {
+            projectContainer.innerHTML = '';
+            
+            const filteredProjects = filter === 'all' 
+                ? projectData 
+                : projectData.filter(project => project.category === filter);
+            
+            filteredProjects.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow';
+                projectCard.dataset.category = project.category;
+                
+                projectCard.innerHTML = `
+                    <div class="aspect-w-16 aspect-h-9">
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0 flex flex-col justify-end p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
+                        <p class="text-white/80 text-sm">${project.description}</p>
+                        <span class="inline-block mt-2 px-3 py-1 text-xs rounded-full ${project.category === 'tech' ? 'bg-primary' : project.category === 'fun' ? 'bg-accent' : 'bg-green-500'} text-white">
+                            ${project.category.charAt(0).toUpperCase() + project.category.slice(1)}
+                        </span>
+                    </div>
+                `;
+                
+                projectContainer.appendChild(projectCard);
+            });
+        };
+        
+        renderProjects();
+        
+        projectFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                // Remove active class from all filters
+                projectFilters.forEach(f => f.classList.remove('bg-primary', 'text-white'));
+                // Add active class to clicked filter
+                filter.classList.add('bg-primary', 'text-white');
+                // If not "All", also remove rounded corners from adjacent buttons
+                if (filter.innerHTML.trim() === 'All') {
+                    projectFilters[1].classList.add('rounded-l-lg');
+                    projectFilters[3].classList.add('rounded-r-lg');
+                } else {
+                    if (filter === projectFilters[0]) {
+                        projectFilters[1].classList.remove('rounded-l-lg');
+                    } else if (filter === projectFilters[3]) {
+                        projectFilters[2].classList.remove('rounded-r-lg');
+                    }
+                }
+                
+                renderProjects(filter.dataset.filter);
+            });
+        });
+        
+        
+        
+       
+           
+        // Easter egg - if user types "naresh" anywhere on the page
+        let typed = '';
+        const easterEggMessage = document.createElement('div');
+        easterEggMessage.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-primary text-white px-4 py-2 rounded-full shadow-lg hidden z-50';
+        easterEggMessage.textContent = 'You discovered our secret! 🎉';
+        document.body.appendChild(easterEggMessage);
+        
+        document.addEventListener('keydown', (e) => {
+            typed += e.key.toLowerCase();
+            if (typed.length > 10) {
+                typed = typed.slice(typed.length - 10);
+            }
+            
+            if (typed.includes('naresh')) {
+                easterEggMessage.classList.remove('hidden');
+                setTimeout(() => {
+                    easterEggMessage.classList.add('hidden');
+                }, 3000);
+                typed = '';
+            }
+        });
+    </script>
+</body>
+</html>
