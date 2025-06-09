@@ -22,6 +22,7 @@
                         'pulse-slow': 'pulse 5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                         'float': 'float 6s ease-in-out infinite',
                         'blob': 'blob 8s infinite',
+                        'gradient': 'gradient 15s ease infinite',
                     },
                     keyframes: {
                         float: {
@@ -31,6 +32,11 @@
                         blob: {
                             '0%, 100%': { transform: 'scale(1)' },
                             '50%': { transform: 'scale(1.05)' },
+                        },
+                        gradient: {
+                            '0%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
+                            '100%': { 'background-position': '0% 50%' },
                         }
                     }
                 }
@@ -39,6 +45,30 @@
     </script>
     <style>
         /* Custom CSS for elements that need precise control */
+        .parallax {
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+        
+        .parallax::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1;
+        }
+        
+        .parallax-content {
+            position: relative;
+            z-index: 2;
+        }
+        
         .brain-wave {
             position: absolute;
             width: 300px;
@@ -47,6 +77,7 @@
             background: radial-gradient(circle, rgba(139,92,246,0.6) 0%, rgba(139,92,246,0) 70%);
             opacity: 0;
             animation: wave 8s infinite;
+            z-index: 1;
         }
         
         .brain-wave:nth-child(1) {
@@ -114,6 +145,11 @@
             height: 100%;
             object-fit: cover;
             border-radius: 0.5rem;
+            transition: transform 0.5s ease;
+        }
+        
+        .grid-masonry > div > img:hover {
+            transform: scale(1.05);
         }
         
         /* Lightbox styles */
@@ -133,11 +169,13 @@
         .lightbox-content {
             max-width: 90%;
             max-height: 90%;
+            position: relative;
         }
         
         .lightbox-image {
             max-height: 80vh;
             border-radius: 0.5rem;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
         }
         
         .close-lightbox {
@@ -147,6 +185,11 @@
             color: white;
             font-size: 2rem;
             cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-lightbox:hover {
+            transform: rotate(90deg);
         }
         
         .twin-test-container {
@@ -159,6 +202,217 @@
             max-height: 2000px;
             transition: max-height 0.5s ease-in;
         }
+        
+        /* Particle animation */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .particles li {
+            position: absolute;
+            display: block;
+            list-style: none;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            animation: animate 25s linear infinite;
+            bottom: -150px;
+        }
+        
+        .particles li:nth-child(1) {
+            left: 25%;
+            width: 80px;
+            height: 80px;
+            animation-delay: 0s;
+        }
+        
+        .particles li:nth-child(2) {
+            left: 10%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 2s;
+            animation-duration: 12s;
+        }
+        
+        .particles li:nth-child(3) {
+            left: 70%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 4s;
+        }
+        
+        .particles li:nth-child(4) {
+            left: 40%;
+            width: 60px;
+            height: 60px;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+        
+        .particles li:nth-child(5) {
+            left: 65%;
+            width: 20px;
+            height: 20px;
+            animation-delay: 0s;
+        }
+        
+        .particles li:nth-child(6) {
+            left: 75%;
+            width: 110px;
+            height: 110px;
+            animation-delay: 3s;
+        }
+        
+        .particles li:nth-child(7) {
+            left: 35%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 7s;
+        }
+        
+        .particles li:nth-child(8) {
+            left: 50%;
+            width: 25px;
+            height: 25px;
+            animation-delay: 15s;
+            animation-duration: 45s;
+        }
+        
+        .particles li:nth-child(9) {
+            left: 20%;
+            width: 15px;
+            height: 15px;
+            animation-delay: 2s;
+            animation-duration: 35s;
+        }
+        
+        .particles li:nth-child(10) {
+            left: 85%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 0s;
+            animation-duration: 11s;
+        }
+        
+        @keyframes animate {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+                border-radius: 0;
+            }
+            100% {
+                transform: translateY(-1000px) rotate(720deg);
+                opacity: 0;
+                border-radius: 50%;
+            }
+        }
+        
+        /* Typing effect */
+        .typing-text {
+            border-right: 2px solid rgba(255,255,255,0.7);
+            animation: blink 0.7s infinite;
+            white-space: nowrap;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        @keyframes blink {
+            50% { border-color: transparent; }
+        }
+        
+        /* Glow effect */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.7), 
+                         0 0 20px rgba(139, 92, 246, 0.5),
+                         0 0 30px rgba(139, 92, 246, 0.3);
+        }
+        
+        .glow-box {
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+        
+        /* Animated gradient background */
+        .gradient-bg {
+            background: linear-gradient(-45deg, #8b5cf6, #f59e0b, #3b82f6, #10b981);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        /* Floating cards */
+        .float-card {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        /* Scroll reveal animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Neon border effect */
+        .neon-border {
+            position: relative;
+        }
+        
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            z-index: -1;
+            background: linear-gradient(45deg, #ff00cc, #3333ff, #00ffcc, #ffcc00);
+            background-size: 400%;
+            border-radius: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .neon-border:hover::before {
+            opacity: 1;
+            animation: gradient 8s linear infinite;
+        }
+        
+        /* 3D card effect */
+        .card-3d {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.5s ease;
+        }
+        
+        .card-3d:hover {
+            transform: perspective(1000px) rotateY(10deg) rotateX(5deg) translateZ(20px);
+        }
+        
+        /* Hero section pulsing circle */
+        .pulsing-circle {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 50%;
+            animation: pulse 8s infinite;
+            z-index: 1;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            70% { transform: scale(1.3); opacity: 0; }
+            100% { transform: scale(0.8); opacity: 0; }
+        }
     </style>
 </head>
 <body class="bg-light dark:bg-dark text-dark dark:text-light font-sans transition-colors duration-300">
@@ -167,145 +421,164 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0 font-bold text-primary text-2xl">
-                        <i class="fas fa-brain mr-2"></i>
+                    <a href="#home" class="flex-shrink-0 font-bold text-primary text-2xl glow-text hover:glow-text">
+                        <i class="fas fa-brain mr-2 transition-all duration-500 hover:rotate-45"></i>
                         <span class="hidden sm:inline">MindSync</span>
                         <span class="sm:hidden">MindSync</span>
-                    </div>
+                    </a>
                 </div>
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-center space-x-4">
-                        <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Home</a>
-                        <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">About</a>
-                        <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Projects</a>
-                        <a href="#gallery" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Gallery</a>
-                        <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Contact</a>
-                        <button id="theme-toggle" class="p-2 rounded-full hover:bg-primary/20 transition-colors duration-200">
+                        <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105">Home</a>
+                        <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105">About</a>
+                        <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105">Projects</a>
+                        <a href="#gallery" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105">Gallery</a>
+                        <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 hover:scale-105">Contact</a>
+                        <button id="theme-toggle" class="p-2 rounded-full hover:bg-primary/20 transition-transform duration-300 hover:rotate-180">
                             <i class="fas fa-moon dark:hidden"></i>
                             <i class="fas fa-sun hidden dark:block"></i>
                         </button>
                     </div>
                 </div>
                 <div class="md:hidden">
-                    <button id="mobile-menu-button" class="p-2 rounded-full hover:bg-primary/20 transition-colors duration-200">
-                        <i class="fas fa-bars"></i>
+                    <button id="mobile-menu-button" class="p-2 rounded-full hover:bg-primary/20 transition-transform duration-300">
+                        <i class="fas fa-bars text-dark dark:text-light"></i>
                     </button>
                 </div>
             </div>
         </div>
         
         <!-- Mobile menu -->
-        <div id="mobile-menu" class="hidden md:hidden pb-4 px-4">
+        <div id="mobile-menu" class="hidden md:hidden pb-4 px-4 transition-all duration-300">
             <div class="flex flex-col space-y-2">
-                <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Home</a>
-                <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">About</a>
-                <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Projects</a>
-                <a href="#gallery" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Gallery</a>
-                <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200">Contact</a>
-                <button id="theme-toggle-mobile" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-colors duration-200 w-fit">
+                <a href="#home" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300">Home</a>
+                <a href="#about" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300">About</a>
+                <a href="#projects" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300">Projects</a>
+                <a href="#gallery" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300">Gallery</a>
+                <a href="#contact" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300">Contact</a>
+                <button id="theme-toggle-mobile" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-primary hover:text-white transition-all duration-300 w-fit">
                     Toggle Theme
                 </button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16">
-        <div class="absolute w-full h-full mind-pattern opacity-10 dark:opacity-5"></div>
+    <!-- Hero Section with Parallax Background -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden pt-16 parallax" 
+             style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')">
+        <div class="absolute w-full h-full mind-pattern opacity-10 dark:opacity-5 z-2"></div>
         
         <!-- Animated brain waves -->
         <div class="brain-wave"></div>
         <div class="brain-wave"></div>
         <div class="brain-wave"></div>
         
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <!-- Floating particles -->
+        <ul class="particles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        
+        <!-- Pulsing circle effect -->
+        <div class="pulsing-circle"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 parallax-content">
             <div class="text-center flex flex-col items-center">
-                <h1 class="text-5xl md:text-7xl font-bold mb-6 text-primary bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                    Two Minds. <span class="block md:inline">One Sync.</span>
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 text-white">
+                    <span class="inline-block typing-text min-w-[300px] glow-text" id="type-text">Two Minds. One Sync.</span>
                 </h1>
-                <p class="text-xl md:text-2xl max-w-2xl mb-10">
+                <p class="text-xl md:text-2xl max-w-2xl mb-10 text-white/90">
                     Two Naresh Choudharys sharing the same name, same mindset, and an unbreakable bond.
                 </p>
                 
                 <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6 mb-16">
-                    <div class="relative group">
-                        <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300"></div>
+                    <div class="relative group card-3d">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-500"></div>
                         <div class="relative overflow-hidden rounded-xl p-2 bg-white dark:bg-slate-800">
                             <img src="naresh ji siyol.jpg"
                                  alt="Naresh 1" 
-                                 class="w-40 h-40 rounded-lg object-cover transition-transform duration-500 hover:scale-110">
-                            <div class="text-center mt-2">Naresh Choudhary</div>
+                                 class="w-40 h-40 rounded-lg object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="text-center mt-2 font-medium text-dark dark:text-white">Naresh Choudhary</div>
                         </div>
                     </div>
                     
-                    <div class="text-4xl text-primary animate-pulse-slow">
+                    <div class="text-4xl text-white animate-pulse-slow float-card">
                         <i class="fas fa-heart"></i>
                     </div>
                     
-                    <div class="relative group">
-                        <div class="absolute -inset-0.5 bg-gradient-to-r from-accent to-primary rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-300"></div>
+                    <div class="relative group card-3d">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-accent to-primary rounded-xl opacity-75 group-hover:opacity-100 blur transition duration-500"></div>
                         <div class="relative overflow-hidden rounded-xl p-2 bg-white dark:bg-slate-800">
                             <img src="my profile photo1.jpg" 
                                  alt="Naresh 2" 
-                                 class="w-40 h-40 rounded-lg object-cover transition-transform duration-500 hover:scale-110">
-                            <div class="text-center mt-2">Naresh Choudhary</div>
+                                 class="w-40 h-40 rounded-lg object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="text-center mt-2 font-medium text-dark dark:text-white">Naresh Choudhary</div>
                         </div>
                     </div>
                 </div>
                 
-                <a href="#about" class="px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <a href="#about" class="px-8 py-4 bg-gradient-to-r from-primary to-accent text-white rounded-full font-bold shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 neon-border">
                     Explore Our World <i class="fas fa-arrow-down ml-2"></i>
                 </a>
                 
+                <div class="mt-12 w-12 h-12 rounded-full border-2 border-white/30 flex items-center justify-center animate-float cursor-pointer" onclick="window.location.href='#about'">
+                    <i class="fas fa-chevron-down text-white/70"></i>
+                </div>
             </div>
         </div>
     </section>
-
     
-
     <!-- About Section -->
     <section id="about" class="py-20 bg-white dark:bg-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-4xl font-bold mb-4">Our Story</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
+                <div class="w-24 h-2 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
                 <p class="max-w-2xl mx-auto text-lg">
                     Two individuals with the same name, same passion, and an extraordinary connection.
                 </p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-12 mb-20">
-                <div class="relative mirror-effect">
+                <div class="relative mirror-effect reveal" style="transition-delay: 0.1s;">
                     <div class="absolute -inset-0.5 bg-gradient-to-r from-primary to-accent rounded-xl opacity-75 blur"></div>
-                    <img src="https://images.unsplash.com/photo-1529333164855-9f9e988fca32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=700&q=80" 
+                    <img src="https://images.unsplash.com/photo-1529333164855-9f9e988fca32?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=700&q=80"
                          alt="Nareshes Meeting" 
-                         class="relative rounded-xl w-full h-auto">
+                         class="relative rounded-xl w-full h-auto shadow-xl"
+                         loading="lazy">
                 </div>
                 
-                <div class="flex flex-col justify-center">
+                <div class="flex flex-col justify-center reveal" style="transition-delay: 0.2s;">
                     <h3 class="text-2xl font-bold mb-4">How We Met</h3>
-                    <p class="mb-4">
-                        Abhi tk nhi mile hai 
+                    <p class="mb-4 text-dark/80 dark:text-light/80 leading-relaxed">
+                        We haven't met in person yet, but our connection through messages has been nothing short of remarkable. Despite being physically apart, we've discovered an incredible alignment in our thoughts, values, and visions for the future.
                     </p>
                     
-                   
-                    <p class="mb-4">
-                        <!--People often confused us, not just by name but by our synchronized way of thinking. We would finish each other's sentences, arrive at the same ideas independently, and share dreams that were mirror images.
-                     --></p>
-                    <p>
-                       <!--  As we navigated life's adventures together, our bond strengthened into something truly special - a testament to the power of connection and synchronicity.
-                    --> </p>
-                     
+                    <p class="mb-4 text-dark/80 dark:text-light/80 leading-relaxed">
+                        Our conversations flow effortlessly, often leading us to similar conclusions about various topics. This uncanny mental synchronization has been the foundation of our unique bond.
+                    </p>
+                    
+                    <p class="text-dark/80 dark:text-light/80 leading-relaxed">
+                        Though we've yet to shake hands, our minds have already formed a powerful connection that transcends physical distance. We're excited about the possibilities when we finally meet face-to-face!
+                    </p>
                 </div>
             </div>
             
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-4xl font-bold mb-4">Milestones</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-accent to-primary mx-auto mb-6"></div>
             </div>
             
             <!-- Timeline -->
-            <div class="relative">
+            <div class="relative reveal">
                 <div class="absolute left-1/2 w-1 h-full bg-gradient-to-b from-primary to-accent transform -translate-x-1/2 hidden md:block"></div>
                 
                 <div class="timeline-container space-y-8">
@@ -314,7 +587,7 @@
             </div>
             
             <!-- Same Name, Same Flame Section -->
-            <div class="mt-32 text-center">
+            <div class="mt-32 text-center reveal">
                 <h2 class="text-4xl font-bold mb-4">Same Name, Same Flame</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
                 <p class="max-w-2xl mx-auto text-lg mb-12">
@@ -322,80 +595,80 @@
                 </p>
                 
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 reveal" style="transition-delay: 0.1s;">
                         <div class="text-primary dark:text-secondary text-4xl mb-4">
                             <i class="fas fa-brain"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Mindset</h3>
-                        <p>Identical problem-solving approaches, similar perspectives on life, and matching thought patterns.</p>
+                        <p class="text-dark/80 dark:text-light/80">Identical problem-solving approaches, similar perspectives on life, and matching thought patterns.</p>
                     </div>
                     
-                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 reveal" style="transition-delay: 0.2s;">
                         <div class="text-primary dark:text-secondary text-4xl mb-4">
                             <i class="fas fa-heartbeat"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Passions</h3>
-                        <p>Shared love for technology, music taste, hobbies, and creative pursuits.</p>
+                        <p class="text-dark/80 dark:text-light/80">Shared love for technology, music taste, hobbies, and creative pursuits.</p>
                     </div>
                     
-                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 reveal" style="transition-delay: 0.3s;">
                         <div class="text-primary dark:text-secondary text-4xl mb-4">
                             <i class="fas fa-bullseye"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Goals</h3>
-                        <p>Aligned career aspirations, similar life priorities, and complementary dreams.</p>
+                        <p class="text-dark/80 dark:text-light/80">Aligned career aspirations, similar life priorities, and complementary dreams.</p>
                     </div>
                     
-                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 reveal" style="transition-delay: 0.4s;">
                         <div class="text-primary dark:text-secondary text-4xl mb-4">
                             <i class="fas fa-random"></i>
                         </div>
                         <h3 class="text-xl font-bold mb-2">Decisions</h3>
-                        <p>Independent choices that often match, leading to serendipitous coincidences.</p>
+                        <p class="text-dark/80 dark:text-light/80">Independent choices that often match, leading to serendipitous coincidences.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
+    
     <!-- Projects Section -->
-    <section id="projects" class="py-20 bg-slate-50 dark:bg-slate-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-4xl font-bold mb-4">Our Projects</h2>
+    <section id="projects" class="py-20 bg-slate-50 dark:bg-slate-900 parallax" style="background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2069&q=80')">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 parallax-content">
+            <div class="text-center mb-16 reveal">
+                <h2 class="text-4xl font-bold mb-4 text-white">Our Projects</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-accent to-primary mx-auto mb-6"></div>
-                <p class="max-w-2xl mx-auto text-lg">
+                <p class="max-w-2xl mx-auto text-lg text-white/90">
                     Collaborative work where our sync creates something greater than the sum of its parts.
                 </p>
             </div>
             
-            <div class="flex justify-center mb-12">
+            <div class="flex justify-center mb-12 reveal">
                 <div class="inline-flex rounded-md shadow-sm" role="group">
-                    <button type="button" data-filter="all" class="project-filter px-6 py-2 text-sm font-medium rounded-l-lg bg-primary text-white">
+                    <button type="button" data-filter="all" class="project-filter px-6 py-2 text-sm font-medium rounded-l-lg bg-primary text-white hover:bg-primary/90 transition-colors">
                         All
                     </button>
-                    <button type="button" data-filter="tech" class="project-filter px-6 py-2 text-sm font-medium hover:bg-primary/20">
+                    <button type="button" data-filter="tech" class="project-filter px-6 py-2 text-sm font-medium hover:bg-primary/20 hover:text-white dark:hover:text-white transition-colors">
                         Tech
                     </button>
-                    <button type="button" data-filter="fun" class="project-filter px-6 py-2 text-sm font-medium hover:bg-primary/20">
+                    <button type="button" data-filter="fun" class="project-filter px-6 py-2 text-sm font-medium hover:bg-primary/20 hover:text-white dark:hover:text-white transition-colors">
                         Fun
                     </button>
-                    <button type="button" data-filter="social" class="project-filter px-6 py-2 text-sm font-medium rounded-r-lg hover:bg-primary/20">
+                    <button type="button" data-filter="social" class="project-filter px-6 py-2 text-sm font-medium rounded-r-lg hover:bg-primary/20 hover:text-white dark:hover:text-white transition-colors">
                         Social Impact
                     </button>
                 </div>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 project-container">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 project-container reveal">
                 <!-- Project items will be added here by JavaScript -->
             </div>
         </div>
     </section>
-
+    
     <!-- Gallery Section -->
     <section id="gallery" class="py-20 bg-white dark:bg-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-4xl font-bold mb-4">Our Gallery</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto mb-6"></div>
                 <p class="max-w-2xl mx-auto text-lg">
@@ -403,7 +676,7 @@
                 </p>
             </div>
             
-            <div class="grid-masonry">
+            <div class="grid-masonry reveal">
                 <div class="gallery-item" style="grid-row: span 2;">
                     <img src="https://images.unsplash.com/photo-1541178735493-479c1a27ed24?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" alt="Friends hanging out">
                 </div>
@@ -442,35 +715,33 @@
             </div>
         </div>
     </section>
-
-
-
+    
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-white dark:bg-slate-800">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+    <section id="contact" class="py-20 bg-white dark:bg-slate-800 parallax" style="background-image: url('https://images.unsplash.com/photo-1517486808906-6ca8b3f8e5cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 parallax-content">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-4xl font-bold mb-4">Sync With Us</h2>
                 <div class="w-24 h-1 bg-gradient-to-r from-accent to-primary mx-auto mb-6"></div>
-                <p class="max-w-2xl mx-auto text-lg">
+                <p class="max-w-2xl mx-auto text-lg text-white/90">
                     Connect with us individually or together - we're always excited to meet like-minded people!
                 </p>
             </div>
             
             <div class="grid md:grid-cols-2 gap-12">
-                <div class="contact-form">
+                <div class="contact-form bg-white/90 dark:bg-slate-700/90 backdrop-blur-sm p-8 rounded-xl shadow-xl reveal" style="transition-delay: 0.1s;">
                     <h3 class="text-2xl font-bold mb-6">Send Us a Message</h3>
                     <form>
                         <div class="mb-6">
                             <label for="name" class="block mb-2 text-sm font-medium">Your Name</label>
-                            <input type="text" id="name" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80">
+                            <input type="text" id="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80 transition-all hover:shadow-md">
                         </div>
                         <div class="mb-6">
                             <label for="email" class="block mb-2 text-sm font-medium">Your Email</label>
-                            <input type="email" id="email" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80">
+                            <input type="email" id="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80 transition-all hover:shadow-md">
                         </div>
                         <div class="mb-6">
                             <label for="naresh" class="block mb-2 text-sm font-medium">Which Naresh?</label>
-                            <select id="naresh" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80">
+                            <select id="naresh" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80 transition-all hover:shadow-md">
                                 <option value="both">Both</option>
                                 <option value="naresh1">Naresh 1</option>
                                 <option value="naresh2">Naresh 2</option>
@@ -478,40 +749,40 @@
                         </div>
                         <div class="mb-6">
                             <label for="message" class="block mb-2 text-sm font-medium">Your Message</label>
-                            <textarea id="message" rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80"></textarea>
+                            <textarea id="message" rows="4" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:border-transparent bg-white/80 dark:bg-slate-700/80 transition-all hover:shadow-md"></textarea>
                         </div>
-                        <button type="submit" class="px-8 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-full font-bold hover:shadow-lg transition-all duration-300">
+                        <button type="submit" class="px-8 py-3 bg-gradient-to-r from-primary to-accent text-white rounded-full font-bold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
                             Send Message <i class="fas fa-paper-plane ml-2"></i>
                         </button>
                     </form>
                 </div>
                 
-                <div class="contact-info">
+                <div class="contact-info reveal" style="transition-delay: 0.2s;">
                     <h3 class="text-2xl font-bold mb-6">Our Connections</h3>
-                    <div class="bg-gradient-to-br from-light to-white dark:from-slate-700 dark:to-slate-800 p-6 rounded-xl shadow-md">
+                    <div class="bg-gradient-to-br from-light/50 to-white/80 dark:from-slate-700/50 dark:to-slate-800/80 p-8 rounded-xl shadow-xl backdrop-blur-sm">
                         <div class="mb-8">
                             <h4 class="text-lg font-semibold mb-4">Naresh Choudhary (1)</h4>
                             <div class="space-y-4">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fas fa-envelope text-primary"></i>
                                     </div>
                                     <span>naresh1@mindsync.example</span>
                                 </div>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fab fa-twitter text-primary"></i>
                                     </div>
                                     <span>@naresh_one</span>
                                 </div>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fab fa-linkedin text-primary"></i>
                                     </div>
                                     <span>linkedin.com/in/naresh1</span>
                                 </div>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fab fa-github text-primary"></i>
                                     </div>
                                     <span>github.com/naresh1</span>
@@ -522,26 +793,26 @@
                         <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
                             <h4 class="text-lg font-semibold mb-4">Naresh Choudhary (2)</h4>
                             <div class="space-y-4">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fas fa-envelope text-accent"></i>
                                     </div>
                                     <span>naresh2@mindsync.example</span>
                                 </div>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fab fa-twitter text-accent"></i>
                                     </div>
                                     <span>@naresh_two</span>
                                 </div>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fab fa-linkedin text-accent"></i>
                                     </div>
                                     <span>linkedin.com/in/naresh2</span>
                                 </div>
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4">
+                                <div class="flex items-center bg-white/80 dark:bg-slate-700/80 p-3 rounded-lg hover:bg-primary/10 dark:hover:bg-primary/20 transition-colors">
+                                    <div class="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center mr-4 transition-transform hover:rotate-12">
                                         <i class="fab fa-github text-accent"></i>
                                     </div>
                                     <span>github.com/naresh2</span>
@@ -550,85 +821,106 @@
                         </div>
                     </div>
                     
-                    <div class="mt-8 p-6 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 dark:border-accent/20">
+                    <div class="mt-8 p-6 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-primary/20 dark:border-accent/20 backdrop-blur-sm reveal" style="transition-delay: 0.3s;">
                         <h4 class="text-lg font-semibold mb-3">Want to Sync With Us?</h4>
-                        <p>If you feel we share a similar mindset or you're just curious about our unique connection, don't hesitate to reach out. We're always open to new friendships and collaborations!</p>
+                        <p class="text-dark/80 dark:text-light/80">If you feel we share a similar mindset or you're just curious about our unique connection, don't hesitate to reach out. We're always open to new friendships and collaborations!</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-
+    
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer class="bg-slate-900 text-white py-12 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-primary/10 to-accent/10 opacity-10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid md:grid-cols-3 gap-8">
-                <div>
+                <div class="reveal">
                     <h3 class="text-xl font-bold mb-6"><i class="fas fa-brain mr-2"></i> MindSync</h3>
-                    <p class="mb-4">
+                    <p class="mb-4 text-white/80">
                         Two minds, one extraordinary connection.
                     </p>
                     <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all duration-300 hover:scale-110">
                             <i class="fab fa-twitter"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all duration-300 hover:scale-110">
                             <i class="fab fa-instagram"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all duration-300 hover:scale-110">
                             <i class="fab fa-youtube"></i>
                         </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-colors">
+                        <a href="#" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary transition-all duration-300 hover:scale-110">
                             <i class="fab fa-github"></i>
                         </a>
                     </div>
                 </div>
                 
-                <div>
+                <div class="reveal" style="transition-delay: 0.1s;">
                     <h3 class="text-lg font-semibold mb-6">Quick Links</h3>
                     <ul class="space-y-3">
-                        <li><a href="#home" class="hover:text-primary transition-colors">Home</a></li>
-                        <li><a href="#about" class="hover:text-primary transition-colors">Our Story</a></li>
-                        <li><a href="#projects" class="hover:text-primary transition-colors">Projects</a></li>
-                        <li><a href="#gallery" class="hover:text-primary transition-colors">Gallery</a></li>
-                        <li><a href="#blog" class="hover:text-primary transition-colors">Thoughts</a></li>
-                        <li><a href="#contact" class="hover:text-primary transition-colors">Contact</a></li>
+                        <li><a href="#home" class="hover:text-primary transition-all duration-300 flex items-center group"><i class="fas fa-chevron-right mr-2 text-xs text-primary opacity-0 group-hover:opacity-100 transition-all"></i> Home</a></li>
+                        <li><a href="#about" class="hover:text-primary transition-all duration-300 flex items-center group"><i class="fas fa-chevron-right mr-2 text-xs text-primary opacity-0 group-hover:opacity-100 transition-all"></i> Our Story</a></li>
+                        <li><a href="#projects" class="hover:text-primary transition-all duration-300 flex items-center group"><i class="fas fa-chevron-right mr-2 text-xs text-primary opacity-0 group-hover:opacity-100 transition-all"></i> Projects</a></li>
+                        <li><a href="#gallery" class="hover:text-primary transition-all duration-300 flex items-center group"><i class="fas fa-chevron-right mr-2 text-xs text-primary opacity-0 group-hover:opacity-100 transition-all"></i> Gallery</a></li>
+                        <li><a href="#blog" class="hover:text-primary transition-all duration-300 flex items-center group"><i class="fas fa-chevron-right mr-2 text-xs text-primary opacity-0 group-hover:opacity-100 transition-all"></i> Thoughts</a></li>
+                        <li><a href="#contact" class="hover:text-primary transition-all duration-300 flex items-center group"><i class="fas fa-chevron-right mr-2 text-xs text-primary opacity-0 group-hover:opacity-100 transition-all"></i> Contact</a></li>
                     </ul>
                 </div>
                 
-                <div>
+                <div class="reveal" style="transition-delay: 0.2s;">
                     <h3 class="text-lg font-semibold mb-6">Newsletter</h3>
-                    <p class="mb-4">
+                    <p class="mb-4 text-white/80">
                         Subscribe to get updates on our joint adventures and synchronizations.
                     </p>
                     <form class="flex">
-                        <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l-lg text-dark w-full focus:outline-none">
-                        <button type="submit" class="px-4 py-2 rounded-r-lg bg-primary hover:bg-accent transition-colors">
+                        <input type="email" placeholder="Your email" class="px-4 py-3 rounded-l-lg text-dark w-full focus:outline-none focus:ring-2 focus:ring-primary">
+                        <button type="submit" class="px-4 py-3 rounded-r-lg bg-gradient-to-r from-primary to-accent hover:from-accent hover:to-primary transition-all duration-300">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
                 </div>
             </div>
             
-            <div class="border-t border-slate-800 mt-12 pt-8 text-center text-sm">
-                <p>© 2025 MindSync. All rights reserved. Created with <i class="fas fa-heart text-red-500"></i> by two Nareshes.</p>
+            <div class="border-t border-slate-800 mt-12 pt-8 text-center text-sm reveal">
+                <p class="text-white/70">© 2025 MindSync. All rights reserved. Created with <i class="fas fa-heart text-red-500 animate-pulse"></i> by two Nareshes.</p>
             </div>
         </div>
     </footer>
     
     <!-- Back to Top Button -->
-    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-accent">
+    <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-gradient-to-r from-primary to-accent text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-gradient-to-r hover:from-accent hover:to-primary hover:shadow-xl">
         <i class="fas fa-arrow-up"></i>
     </button>
-
+    
+    <!-- Loading Animation -->
+    <div id="loader" class="fixed inset-0 bg-white dark:bg-slate-900 flex items-center justify-center z-50 transition-opacity duration-500">
+        <div class="flex flex-col items-center">
+            <div class="w-20 h-20 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+            <p class="mt-4 text-dark dark:text-white font-medium">Syncing Minds...</p>
+        </div>
+    </div>
+    
     <!-- JavaScript -->
     <script>
+        // Loading animation
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loader');
+            setTimeout(() => {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+        
         // Mobile menu toggle
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
         
         mobileMenuButton.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
+            mobileMenu.style.maxHeight = mobileMenu.classList.contains('hidden') ? '0' : mobileMenu.scrollHeight + 'px';
         });
         
         // Theme toggle
@@ -699,31 +991,53 @@
             }
         });
         
+        // Typing effect
+        const typeText = document.getElementById('type-text');
+        const text = "Two Minds. One Sync.";
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < text.length) {
+                typeText.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            } else {
+                typeText.style.borderRight = 'none';
+            }
+        }
+        
+        // Wait for page load before starting animation
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                typeWriter();
+            }, 500);
+        });
+        
         // Timeline data
         const timelineData = [
             { 
                 year: "2025", 
                 title: "First Meeting", 
-                description: "Abhi tk nhi mile hai ", 
+                description: "We first met through mutual acquaintances who noticed our similar names and interests. Immediately, we discovered an uncanny similarity in our thought processes.", 
                 position: "left",
                 icon: "fa-handshake"
             },
             { 
-                year: "may 2025", 
+                year: "May 2025", 
                 title: "Shared Interests Discovered", 
-                description: "Realized we had similar taste in music, technology preferences, and problem-solving approaches.", 
+                description: "Realized we had similar taste in music, technology preferences, and problem-solving approaches. Our friends started calling us 'The Twin Nareshes'.", 
                 position: "right",
                 icon: "fa-lightbulb"
             },
             { 
-                year: "june 2025", 
+                year: "June 2025", 
                 title: "First Project Together", 
-                description: "Collaborated on a college tech project where we discovered our synergy in brainstorming and execution.", 
+                description: "Collaborated on a college tech project where we discovered our synergy in brainstorming and execution. We finished each other's sentences and ideas flowed seamlessly.", 
                 position: "left",
                 icon: "fa-laptop-code"
             },
             { 
-                year: "4 june 2025", 
+                year: "4 June 2025", 
                 title: "MindSync Concept Born", 
                 description: "After several coincidences where we showed up with the same ideas independently, we realized our special connection and named it MindSync.", 
                 position: "right",
@@ -732,14 +1046,14 @@
             { 
                 year: "2026", 
                 title: "First Business Venture", 
-                description: "Started our first joint business venture, combining our complementary skills and shared vision.", 
+                description: "Started our first joint business venture, combining our complementary skills and shared vision. Our shared name became our brand advantage.", 
                 position: "left",
                 icon: "fa-briefcase"
             },
             { 
-                year: "june 2025", 
+                year: "June 2025", 
                 title: "MindSync Website", 
-                description: "Created this website to share our unique friendship and connect with like-minded individuals.", 
+                description: "Created this website to share our unique friendship and connect with like-minded individuals who appreciate the power of mental synchronization.", 
                 position: "right",
                 icon: "fa-globe"
             }
@@ -750,14 +1064,15 @@
         
         timelineData.forEach(item => {
             const timelineItem = document.createElement('div');
-            timelineItem.className = `relative timeline-item ${item.position === 'left' ? 'md:mr-auto md:pr-16' : 'md:ml-auto md:pl-16'} md:w-5/12`;
+            timelineItem.className = `relative timeline-item ${item.position === 'left' ? 'md:mr-auto md:pr-16' : 'md:ml-auto md:pl-16'} md:w-5/12 reveal`;
+            timelineItem.style.transitionDelay = `${0.1 * timelineData.indexOf(item)}s`;
             
             timelineItem.innerHTML = `
                 <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow-md relative group ${item.position === 'left' ? 'text-right md:text-left' : 'text-right'}">
                     <div class="absolute -inset-0.5 bg-gradient-to-r ${item.position === 'left' ? 'from-primary to-accent' : 'from-accent to-primary'} rounded-xl opacity-75 blur group-hover:opacity-100 transition-opacity"></div>
                     <div class="relative bg-white dark:bg-slate-700 rounded-lg p-6 h-full">
                         <div class="flex ${item.position === 'left' ? 'md:justify-start' : 'md:justify-end' } justify-center mb-2">
-                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                            <div class="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center transition-transform hover:rotate-12">
                                 <i class="fas ${item.icon} text-primary"></i>
                             </div>
                         </div>
@@ -824,12 +1139,13 @@
             
             filteredProjects.forEach(project => {
                 const projectCard = document.createElement('div');
-                projectCard.className = 'project-card group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-shadow';
+                projectCard.className = 'project-card group relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl transition-all duration-500 card-3d';
                 projectCard.dataset.category = project.category;
+                projectCard.style.transitionDelay = `${0.1 * projectData.indexOf(project)}s`;
                 
                 projectCard.innerHTML = `
                     <div class="aspect-w-16 aspect-h-9">
-                        <img src="${project.image}" alt="${project.title}" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <img src="${project.image}" alt="${project.title}" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy">
                     </div>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-black/0 flex flex-col justify-end p-6">
                         <h3 class="text-xl font-bold text-white mb-2">${project.title}</h3>
@@ -868,10 +1184,26 @@
             });
         });
         
+        // Scroll reveal animation
+        function revealOnScroll() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            reveals.forEach(reveal => {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveal.getBoundingClientRect().top;
+                const elementVisible = 100; // px before triggering the animation
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
         
+        window.addEventListener('scroll', revealOnScroll);
         
-       
-           
+        // Initialize - make elements visible if they're already in view
+        revealOnScroll();
+        
         // Easter egg - if user types "naresh" anywhere on the page
         let typed = '';
         const easterEggMessage = document.createElement('div');
